@@ -1,0 +1,72 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffffff">
+
+    <LinearLayout
+        android:id="@+id/left"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:background="#ffa5c9fb"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/head" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ferraborghini"
+            android:typeface="serif" />
+
+        <Button
+            android:id="@+id/button_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="behind" />
+    </LinearLayout>
+
+    <com.example.ts.slifdemo.myLayout.MyLinearLayout
+        android:id="@+id/fl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/start"
+
+            >
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="30dp"
+                android:layout_height="20dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/set"
+                android:onClick="move"
+                android:paddingTop="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="38dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginRight="10dp"
+                android:text="登录/注册"
+                android:textColor="@android:color/white"
+                android:textSize="35px"
+                android:typeface="monospace" />
+
+        </RelativeLayout>
+    </com.example.ts.slifdemo.myLayout.MyLinearLayout>
+
+</FrameLayout>
