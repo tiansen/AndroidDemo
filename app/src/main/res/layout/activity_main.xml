@@ -37,12 +37,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/start"
-
+            android:background="@drawable/background"
             >
-
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/btn_home"
                 android:layout_width="30dp"
                 android:layout_height="20dp"
                 android:layout_alignParentStart="true"
@@ -52,22 +50,23 @@
                 android:background="@drawable/set"
                 android:onClick="move"
                 android:paddingTop="10dp" />
+            <ListView
+                android:layout_below="@+id/btn_home"
+                android:id="@+id/notes_list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/btn_new_note"
+                android:listSelector="@android:color/transparent" />
 
-            <!--<Button-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentBottom="true"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:layout_marginBottom="38dp"-->
-                <!--android:layout_marginEnd="40dp"-->
-                <!--android:layout_marginRight="10dp"-->
-                <!--android:onClick="login"-->
-                <!--android:text="登录/注册"-->
-                <!--android:textColor="@android:color/white"-->
-                <!--android:textSize="35px"-->
-                <!--android:typeface="monospace"-->
-                <!--android:background="#00000000"/>-->
-
+            <Button
+                android:id="@+id/btn_new_note"
+                android:background="@drawable/new_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:onClick="newNote"
+                android:layout_gravity="bottom"
+                android:layout_alignParentBottom="true" />
         </RelativeLayout>
     </com.example.ts.slifdemo.myLayout.MyLinearLayout>
 

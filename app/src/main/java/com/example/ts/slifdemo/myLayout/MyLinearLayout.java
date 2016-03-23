@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Scroller;
 
-public class MyLinearLayout extends RelativeLayout {
+public class MyLinearLayout extends LinearLayout {
     private Scroller mScroller;
     private int mTouchSlop;
     private float mLastMotionX;
@@ -92,6 +92,33 @@ public class MyLinearLayout extends RelativeLayout {
     //是否被拖动
     private boolean mIsBeingDragged;
 
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+
+        final int action = ev.getAction();
+        final float x = ev.getX();
+        final float y = ev.getY();
+
+        switch (action) {
+            //如果只是点击操作向下传递
+            case MotionEvent.ACTION_DOWN:
+                mLastMotionX = x;
+                mLastMotionY = y;
+                mIsBeingDragged = false;
+                break;
+            //如果是滑动操作不再向下传递
+            case MotionEvent.ACTION_MOVE:
+                final float xDiff = Math.abs(x - mLastMotionX);
+                final float yDiff = Math.abs(y - mLastMotionY);
+                if (xDiff > mTouchSlop && xDiff > yDiff) {
+                    mIsBeingDragged = true;
+                    mLastMotionX = x;
+                }
+                break;
+
+        }
+        return mIsBeingDragged;
+    }
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
 
