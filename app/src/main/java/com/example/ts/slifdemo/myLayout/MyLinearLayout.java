@@ -1,7 +1,9 @@
 package com.example.ts.slifdemo.myLayout;
 
 import android.content.Context;
+import android.nfc.Tag;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -17,6 +19,7 @@ public class MyLinearLayout extends RelativeLayout {
     private float mLastMotionY;
     private VelocityTracker mVelocityTracker;
     private static final int SNAP_VELOCITY = 1000;
+    private static final String TAG = "MyLinearLayout";
     private int width;// 这两个对象传进来就是为了获取宽度的
 
     public MyLinearLayout(Context context) {
@@ -103,6 +106,7 @@ public class MyLinearLayout extends RelativeLayout {
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                Log.i(TAG, "down");
                 if (!mScroller.isFinished()) {
                     mScroller.abortAnimation();
                 }
@@ -116,12 +120,12 @@ public class MyLinearLayout extends RelativeLayout {
 
                 break;
             case MotionEvent.ACTION_MOVE:
-                System.out.println(x + "_" + getScrollX() + "_" + "move_event");
+                Log.i(TAG, x + "_" + getScrollX() + "_" + "move_event");
                 final float deltaX = mLastMotionX - x;//滑动的距离
                 mLastMotionX = x;//上一次滑动到达的位置
                 float oldScrollX = getScrollX();//现在所偏移的距离
                 float scrollX = oldScrollX + deltaX;//这一次滑动后应该偏移的位置
-                System.out.println("scrollX：" + scrollX);
+
                 if (deltaX < 0 && oldScrollX <= 0) { // 向右滑动
                     final float leftBound = 0;
                     final float rightBound = -getLeftWidth();
@@ -136,7 +140,7 @@ public class MyLinearLayout extends RelativeLayout {
                     scrollTo((int) 0, getScrollY());
                     return true;
                 }
-                System.out.println(scrollX + "move_event");
+                Log.i(TAG, scrollX + "move_event");
                 scrollTo((int) scrollX, getScrollY());
 
 //                }
@@ -172,7 +176,6 @@ public class MyLinearLayout extends RelativeLayout {
 
         return true;
     }
-
 
 
     private int getLeftWidth() {
