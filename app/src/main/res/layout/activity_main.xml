@@ -10,23 +10,6 @@
         android:background="#ffa5c9fb"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/head" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ferraborghini"
-            android:typeface="serif" />
-
-        <Button
-            android:id="@+id/button_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="behind" />
     </LinearLayout>
 
     <com.example.ts.slifdemo.myLayout.MyLinearLayout

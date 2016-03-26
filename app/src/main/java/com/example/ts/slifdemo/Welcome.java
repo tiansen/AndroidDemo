@@ -9,24 +9,25 @@ import android.view.View;
 
 import com.example.ts.slifdemo.login.Login;
 import com.example.ts.slifdemo.login.Register;
+import com.example.ts.slifdemo.notes.Notes;
 
 import java.util.HashMap;
 
 public class Welcome extends Activity {
-    String name = "";
-    String pwd = "";
     private static final String TAG = "MyLinearLayout";
+    public static Activity instance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome);
         readLoginState();
-        Log.i(TAG,name +"___"+pwd);
-        if(!"".equals(name)&&!"".equals(pwd)){
+        Log.i(TAG, Notes.name +"___"+Notes.pwd);
+        if(!"".equals(Notes.name)&&!"".equals(Notes.pwd)){
             Intent intent = new Intent(Welcome.this, MainActivity.class);
             startActivity(intent);
             this.finish();
         }
+        instance = this;
     }
 
     /**
@@ -58,7 +59,7 @@ public class Welcome extends Activity {
     public void readLoginState() {
         SharedPreferences preferences = getSharedPreferences("userInfo",
                 Activity.MODE_PRIVATE);
-        name = preferences.getString("name", "");
-        pwd = preferences.getString("pwd", "");
+        Notes.name = preferences.getString("name", "");
+        Notes.pwd = preferences.getString("pwd", "");
     }
 }

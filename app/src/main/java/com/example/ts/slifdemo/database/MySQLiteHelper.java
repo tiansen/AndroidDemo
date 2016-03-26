@@ -11,9 +11,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String CREATE_NOTE_TABLE_SQL = "create table note(" +
             "_id integer primary key autoincrement," +
             "title text NOT NULL DEFAULT ''," +
-            "content text NOT NULL DEFAULT '')";
+            "content text NOT NULL DEFAULT ''," +
+            "flag int NOT NULL DEFAULT 1," +
+            "create_date datetime," +
+            "name text)";
     public MySQLiteHelper(Context context) {
-        super(context, "notes.db", null, 2);
+        super(context, "notes.db", null, 7);
     }
 
     @Override
@@ -23,6 +26,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        sqLiteDatabase.execSQL("drop table note");
+        sqLiteDatabase.execSQL(CREATE_NOTE_TABLE_SQL);
 
     }
 }

@@ -2,6 +2,7 @@ package com.example.ts.slifdemo.notes;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -12,7 +13,11 @@ import android.widget.EditText;
 
 import com.example.ts.slifdemo.MainActivity;
 import com.example.ts.slifdemo.R;
+import com.example.ts.slifdemo.Welcome;
 import com.example.ts.slifdemo.database.MySQLiteHelper;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class NewNote extends Activity {
     private static String TAG = "NewNote";
@@ -37,17 +42,13 @@ public class NewNote extends Activity {
                 Log.i(TAG, "长度：" + cursor.getColumnCount());
                 if (cursor.moveToFirst()) {
                     selectedId = cursor.getInt(0);
-
                     title.setText(cursor.getString(1));
                     content.setText(cursor.getString(2));
                     Log.i(TAG, "数据：" + cursor.getInt(0) + "_" + cursor.getString(1) + "_" + cursor.getString(2));
                     cursor.close();
                 }
-
-
             }
         }
-
     }
 
     @Override
@@ -57,10 +58,12 @@ public class NewNote extends Activity {
         String c = content.getText().toString();
         Log.i(TAG, "插入数据：" + t + "++" + c);
         helper = new MySQLiteHelper(this);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+        String date = df.format(new Date());                              // 获取当前时间
         if (selectedId != 0) {
             helper.getReadableDatabase().execSQL("update note set title = ?, content = ? where _id = ?", new String[]{title.getText().toString(), content.getText().toString(), "" + selectedId});
         } else if (!"".equals(t) && !"".equals(c)) {
-            helper.getReadableDatabase().execSQL("insert into note values(null,?,?)", new String[]{t, c});
+            helper.getReadableDatabase().execSQL("insert into note values(null,?,?,1,?,?)", new String[]{t, c,date, Notes.name});
         }
         Intent intent = getIntent();
         intent.putExtra("update", true);
@@ -89,7 +92,7 @@ public class NewNote extends Activity {
         if (id == R.id.action_settings) {
             if (selectedId != 0) {
                 Log.i(TAG, "删除条目ID为：" + selectedId);
-                helper.getReadableDatabase().execSQL("delete from note where _id = ?", new String[]{"" + selectedId});
+                helper.getReadableDatabase().execSQL("update note set flag = 0 where _id = ?", new String[]{"" + selectedId});
             }
             finish();
             return true;

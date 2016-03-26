@@ -7,8 +7,10 @@
     android:gravity="center_horizontal">
 	<RelativeLayout
 		android:id="@+id/login_top_layout"
+		android:paddingTop="0dp"
+		android:paddingBottom="0dp"
 		android:layout_width="fill_parent"
-		android:layout_height="45dp"
+		android:layout_height="wrap_content"
 		android:layout_alignParentTop="true"
 		android:background="@drawable/title_bar">
 
@@ -34,6 +36,7 @@
 	    android:layout_marginLeft="20dp"
 	    android:layout_marginRight="20dp"
 	    android:singleLine="true"
+		android:text="admin"
 	    android:background="@drawable/login_editbox"
 	    android:hint="请输入用户名"/>
 	<EditText 
@@ -47,7 +50,8 @@
 	    android:layout_marginLeft="20dp"
 	    android:layout_marginRight="20dp"
 	    android:background="@drawable/login_editbox"
-	    android:password="true"
+		android:text="admin"
+		android:password="true"
 	    android:singleLine="true"
 	    android:hint="请输入密码"/>
 	<RelativeLayout 

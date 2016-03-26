@@ -1,36 +1,35 @@
 package com.example.ts.slifdemo;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.example.ts.slifdemo.database.MySQLiteHelper;
+import com.example.ts.slifdemo.left.LeftFragment;
 import com.example.ts.slifdemo.login.Login;
 import com.example.ts.slifdemo.myLayout.MyLinearLayout;
 import com.example.ts.slifdemo.notes.NewNote;
+import com.example.ts.slifdemo.notes.Notes;
 import com.example.ts.slifdemo.notes.NotesListAdapter;
+import com.example.ts.slifdemo.update.ShakeActivity;
+import com.example.ts.slifdemo.update.ShakeListener;
+import com.example.ts.slifdemo.update.ShakeListener.OnShakeListener;
 
-import org.w3c.dom.Text;
 
-import java.lang.reflect.Array;
-import java.util.HashMap;
-
-public class MainActivity extends Activity implements  AdapterView.OnItemClickListener {
+public class MainActivity extends Activity implements AdapterView.OnItemClickListener {
     private static String TAG = "MainActivity:";
     private MySQLiteHelper helper;
     MyLinearLayout myLL;
@@ -40,6 +39,9 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
     LinearLayout leftItem;
     ListView mNotesListView;
     NotesListAdapter adapter;
+    FragmentTransaction t;
+    ShakeListener mShakeListener = null;
+    boolean flag = true;//只响应又一次摇晃事件
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,16 +55,19 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
     protected void onResume() {
         super.onResume();
         Log.i(TAG, "onResume");
+        flag = true;
         init();
     }
 
-    void initList(){
+
+    void initList() {
         helper = new MySQLiteHelper(this);
-        cursor = helper.getReadableDatabase().rawQuery("select * from note", null);
+        cursor = helper.getReadableDatabase().rawQuery("select * from note where flag = 1 and name = ?", new String[]{Notes.name});
         Log.i(TAG, "" + cursor.getCount());
-        adapter = new NotesListAdapter(this,cursor);
+        adapter = new NotesListAdapter(this, cursor);
         mNotesListView.setAdapter(adapter);
     }
+
     void init() {
         myLL = (MyLinearLayout) findViewById(R.id.fl);
         DisplayMetrics metric = new DisplayMetrics();
@@ -71,9 +76,11 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
         scrrenHeight = metric.heightPixels;
         mNotesListView = (ListView) findViewById(R.id.notes_list);
         initList();
+        //cursorItem被单击时调用
         mNotesListView.setOnItemClickListener(this);
-
-
+        //用Fragment填充左边栏
+        t = getFragmentManager().beginTransaction();
+        t.replace(R.id.left, new LeftFragment()).commit();
 
 
         //添加一个监听，当此控件被重绘的时候获取出空间的宽度，直接在此处回去的时候是空值
@@ -87,8 +94,29 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
             }
 
         });
+
+        //摇晃更新
+
+        mShakeListener = new ShakeListener(this);
+        mShakeListener.setOnShakeListener(new OnShakeListener() {
+
+            @Override
+            public void onShake() {
+                if (flag) {
+                    Intent intent = new Intent(MainActivity.this, ShakeActivity.class);
+                    startActivity(intent);
+                    flag =false;
+                }
+            }
+        });
+
     }
 
+    /**
+     * 显示左侧边栏的按键响应事件
+     *
+     * @param view
+     */
     public void move(View view) {
         myLL.smoothScrollTo();
     }
@@ -102,6 +130,7 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
         Intent intent = new Intent(this, Login.class);
         startActivity(intent);
     }
+
 
     /**
      * 创建新的note
@@ -123,9 +152,9 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == 1){
+        if (requestCode == 1 && resultCode == 1) {
             Bundle result = data.getExtras();
-            if (result.getBoolean("update")){
+            if (result.getBoolean("update")) {
                 initList();
             }
         }
@@ -135,15 +164,10 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         TextView tId = (TextView) view.findViewById(R.id.item_id);
-        TextView title = (TextView) view.findViewById(R.id.title);
-        TextView content = (TextView) view.findViewById(R.id.content);
-        Log.i(TAG, "点击的控件Id:"+tId.getText());
-        Log.i(TAG, "点击的控件Id:"+title.getText());
-        Log.i(TAG, "点击的控件Id:"+content.getText());
-
-        Intent intent = new Intent(this,NewNote.class);
+        Log.i(TAG, "点击的控件Id:" + tId.getText());
+        Intent intent = new Intent(this, NewNote.class);
         Bundle bundle = new Bundle();
-        bundle.putString("id",tId.getText().toString());
+        bundle.putString("id", tId.getText().toString());
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -157,4 +181,6 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
 //        finish();
 
     }
+
+
 }

@@ -55,6 +55,7 @@ public class NotesListAdapter extends CursorAdapter {
         viewHolder.title=(TextView) view.findViewById(R.id.title );
         viewHolder.content=(TextView) view.findViewById(R.id.content );
         viewHolder.itemId=(TextView) view.findViewById(R.id.item_id );
+        viewHolder.date=(TextView) view.findViewById(R.id.date );
         view.setTag(viewHolder);
         return view;
     }
@@ -62,17 +63,18 @@ public class NotesListAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        Log. i("cursor" ,"bindView=" +view);
         ViewHolder viewHolder=(ViewHolder) view.getTag();
         //从数据库中查询标题
         int id = cursor.getInt(0);
         String title=cursor.getString(1);
         //从数据库中查内容
         String content=cursor.getString(2);
-        Log.i(TAG, id+"__"+title + "__" + content);
+        String date = cursor.getString(4);
+        Log.i(TAG, id+"__"+title + "__" + content+ "__" + date);
         viewHolder.title.setText(title);
         viewHolder.content.setText(content);
         viewHolder.itemId.setText(""+id);
+        viewHolder.date.setText(date);
     }
 
     private static class ViewHolder
@@ -80,6 +82,7 @@ public class NotesListAdapter extends CursorAdapter {
         TextView title;
         TextView content;
         TextView itemId;
+        TextView date;
 
     }
 }
